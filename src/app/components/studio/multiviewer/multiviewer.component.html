@@ -1,0 +1,160 @@
+<!-- <div class="multiviewer-top-bar">
+    <div class="multiviewer-top-bar-center-div"><p>10:15:45</p></div>
+    <div class="multiviewer-top-bar-center-div">
+        <div class="form-group">
+            <select class="form-select">
+                <option value="%" selected>Default Microphone</option>
+                <option value="px">Headset</option>
+                <option value="em">Bluetooth headset</option>
+            </select>
+        </div>
+    </div>
+    <button class="multiviewer-top-bar-center-div">Edit</button>
+    <button class="multiviewer-top-bar-end-div">New layout</button>
+  </div> -->
+
+<div class="multiviewer-top-bar">
+    <div class="multiviewer-top-bar-center-div">
+        <div class="multiviewer-top-bar-center-btns">
+            <div class="center-div" *ngIf="!inEditMode">
+                <p class="time-stamp">10:15:45</p>
+            </div>
+            <div class="center-div" *ngIf="!inEditMode">
+                <div class="form-group">
+                    <select class="top-bar-select">
+                        <option value="layout1" selected>Layout 1</option>
+                        <option value="layout2">Layout 2</option>
+                        <option value="layout3">Layout 3</option>
+                    </select>
+                </div>
+            </div>
+            <button class="edit-save-btn center-div" style="background-color: #2b2f32;" (click)="enableEditMode()"
+                *ngIf="!inEditMode">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="18.2656" width="18" height="1.5" rx="0.75" fill="white" />
+                    <path
+                        d="M11.5523 6.44768L5.56282 12.4372C5.53163 12.4684 5.51163 12.509 5.50592 12.5527L5.09244 15.7228C5.05847 15.9832 5.28041 16.2051 5.54082 16.1711L8.71084 15.7576C8.75457 15.7519 8.7952 15.7319 8.82639 15.7007L14.8159 9.71125M11.5523 6.44768L13.7172 4.28284C13.8734 4.12663 14.1266 4.12663 14.2828 4.28284L16.9807 6.98073C17.1369 7.13694 17.1369 7.3902 16.9807 7.54641L14.8159 9.71125M11.5523 6.44768C11.5523 6.44768 14 7.47055 14.8159 9.71125"
+                        stroke="white" stroke-width="1.5" />
+                </svg>
+                <span>Edit</span>
+            </button>
+            <div class="center-div" *ngIf="inEditMode">
+                <div class="form-group">
+                    <input type="text" class="form-control form-input" placeholder="Layout 1">
+                </div>
+            </div>
+            <button class="edit-save-btn center-div" style="background-color: #804cf5;" (click)="openSaveLayoutDialog()"
+                *ngIf="inEditMode">
+                Save
+            </button>
+        </div>
+    </div>
+    <button class="multiviewer-top-bar-end-btn" style="background-color: #2b2f32;" *ngIf="!inEditMode">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.5 4L12.5 19M20 11.5L5 11.5" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <span>New Layout</span>
+    </button>
+</div>
+<div class="video-area">
+    <div class="preview-area">
+        <div class="preview-video-container">
+            <div class="preview-video">
+                <img src="https://images.pexels.com/photos/163487/baseball-player-pitcher-ball-163487.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                    alt="baseball">
+                <div class="overlay">
+                    <select name="left-screen" id="left-screen" class="edit-select" *ngIf="inEditMode">
+                        <option value="preview">Preview</option>
+                        <option value="preview">Preview</option>
+                        <option value="preview">Preview</option>
+                    </select>
+                    <p class="overlay-title" *ngIf="!inEditMode">Preview</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="program-area">
+        <div class="program-video-container">
+            <div class="program-video">
+                <img src="https://images.pexels.com/photos/163487/baseball-player-pitcher-ball-163487.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                    alt="baseball">
+                <div class="overlay">
+                    <select name="left-screen" id="left-screen" class="edit-select" *ngIf="inEditMode">
+                        <option value="preview">Program</option>
+                        <option value="preview">Preview</option>
+                        <option value="preview">Preview</option>
+                    </select>
+                    <p class="overlay-title" *ngIf="!inEditMode">Program</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="assets-panel-container">
+    <div class="assets-row">
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+    </div>
+    <div class="assets-row">
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+        <div class="asset-item">
+            <div class="overlay-header" *ngIf="inEditMode">
+                <select class="edit-select">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                </select>
+            </div>
+            <p>No Source</p>
+        </div>
+    </div>
+</div>
+<div class="extra-assets-row-btn-container">
+    <button class="new-row-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1.25L8 14.75M14.75 8L1.25 8" stroke="white" stroke-width="1.125" stroke-linecap="round" />
+        </svg>
+        <span>New Row</span>
+    </button>
+</div>

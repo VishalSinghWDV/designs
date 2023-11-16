@@ -1,0 +1,1180 @@
+<div class="main-production-container">
+    <!-- <div class="production-sidebar"> -->
+    <mat-drawer-container hasBackdrop="false">
+        <mat-drawer #sideDrawer class="new-layer-drawer" mode="over" position="end">
+            <div *ngIf="isNewLayerDrawerContentVisible">
+                <div class="sidebar-heading">
+                    <div class="sidebar-title">
+                        <p style="margin: 0;">New Layer</p>
+                    </div>
+                    <div class="sidebar-heading-icon" style="cursor: pointer;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            (click)="sideDrawer.close()">
+                            <path d="M18.5 5.5L5.5 18.5M5.5 5.5L18.5 18.5" stroke="#595959" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="new-layer-form">
+                    <div class="form-input-container">
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Layer name</p>
+                        </div>
+                        <div class="form-input-icon">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2.25" y="13.6992" width="13.5" height="1.125" rx="0.5625" fill="#595959" />
+                                <path
+                                    d="M8.66424 4.83576L4.17211 9.32789C4.14872 9.35128 4.13372 9.38175 4.12944 9.41455L3.81933 11.7921C3.79385 11.9874 3.9603 12.1538 4.15561 12.1283L6.53313 11.8182C6.56593 11.814 6.5964 11.799 6.61979 11.7756L11.1119 7.28344M8.66424 4.83576L10.2879 3.21213C10.405 3.09497 10.595 3.09497 10.7121 3.21213L12.7355 5.23555C12.8527 5.3527 12.8527 5.54265 12.7355 5.65981L11.1119 7.28344M8.66424 4.83576C8.66424 4.83576 10.5 5.60291 11.1119 7.28344"
+                                    stroke="#595959" stroke-width="1.125" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="layerName" class="form-control new-layer-input">
+                    </div>
+                    <div class="size-title">
+                        <p style="margin: 0 0 8px;">Size</p>
+                    </div>
+                    <div class="size-container">
+                        <div class="size-div">
+                            <p class="size-container-title">Width</p>
+                            <div class="size-form">
+                                <input class="size-input" type="text" placeholder="100" [(ngModel)]="layerWidth">
+                                <select class="size-select" [(ngModel)]="layerWidthUnit">
+                                    <option value="%" selected>%</option>
+                                    <option value="px">px</option>
+                                    <option value="em">em</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="size-div">
+                            <p class="size-container-title">Height</p>
+                            <div class="size-form">
+                                <input class="size-input" type="text" placeholder="100" [(ngModel)]="layerHeight">
+                                <select class="size-select" [(ngModel)]="layerHeightUnit">
+                                    <option value="%" selected>%</option>
+                                    <option value="px">px</option>
+                                    <option value="em">em</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="background-title">
+                        <p style="margin: 0 0 0;">Background</p>
+                    </div>
+                    <div class="background-select-container">
+                        <mat-radio-group aria-label="Select an option" [(ngModel)]="layerBackgroundOption">
+                            <mat-radio-button value="Color">Color</mat-radio-button>
+                            <mat-radio-button value="Image">Image</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="color-picker" *ngIf="layerBackgroundOption=='Color'">
+                        <div class="color-value">
+                            <input type="color" id="colorInput" [(ngModel)]="layerBackgroundColor">
+                            <input type="text" id="colorDisplay" [(ngModel)]="layerBackgroundColor">
+                        </div>
+                    </div>
+                    <div class="layer-image-container" [ngClass]="{'has-image': imageSelected}"
+                        *ngIf="layerBackgroundOption=='Image'">
+                        <div class="layer-image-div" *ngIf="!imageSelected">
+                            <input #fileInput type="file" (change)="onImageSelected($event)" accept="image/*"
+                                style="display: none" id="fileInput" />
+                            <label for="fileInput" class="layer-image-upload-button">
+                                <div class="layer-image-button-text"><svg width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M11.1998 14.3997H12.7998V9.59971H15.1998L11.9998 5.59971L8.7998 9.59971H11.1998V14.3997Z"
+                                            fill="#595959" />
+                                        <path
+                                            d="M18.4 16.8003H5.6V11.2003H4V16.8003C4 17.6827 4.7176 18.4003 5.6 18.4003H18.4C19.2824 18.4003 20 17.6827 20 16.8003V11.2003H18.4V16.8003Z"
+                                            fill="#595959" />
+                                    </svg>
+                                    Upload Image</div>
+                            </label>
+                        </div>
+                        <div class="layer-image-preview" *ngIf="imageSelected">
+                            <img [src]="imageUrl" alt="Image" [ngStyle]="{'object-fit': selectedFilter}" />
+                            <div class="layer-image-button-container">
+                                <button (click)="deleteImage()" class="delete-button"><svg width="18" height="18"
+                                        viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M15.151 4.9365C12.9032 4.71375 10.642 4.599 8.38748 4.599C7.05098 4.599 5.71448 4.6665 4.37798 4.8015L3.00098 4.9365M6.71348 4.25475L6.86198 3.3705C6.96998 2.72925 7.05098 2.25 8.19173 2.25H9.96023C11.101 2.25 11.1887 2.75625 11.29 3.37725L11.4385 4.25475M13.6997 7.0695L13.261 13.8667C13.1867 14.9265 13.126 15.75 11.2427 15.75H6.90923C5.02598 15.75 4.96523 14.9265 4.89098 13.8667L4.45223 7.0695M7.94873 12.0375H10.1965M7.38848 9.3375H10.7635"
+                                            stroke="white" stroke-width="1.125" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <select [(ngModel)]="selectedFilter" class="layer-image-filter-dropdown">
+                                <option value="fill">Fill</option>
+                                <option value="cover">Cover</option>
+                                <option value="contain">Contain</option>
+                                <option value="none">None</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="opacity-title">
+                        <p style="margin: 0 0 0;">Opactiy</p>
+                        <p style="margin: 0 0 0;">100%</p>
+                    </div>
+                    <div class="opacity-container">
+                        <mat-slider>
+                            <input matSliderThumb [(ngModel)]="layerOpacity">
+                        </mat-slider>
+                    </div>
+                    <div class="sidebar-form-btn-container">
+                        <button mat-raised-button class="sidebar-form-btn" color="primary" (click)="addLayer()">Add
+                            Layer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isAddSourceDrawerContentVisible">
+                <div class="sidebar-heading" *ngIf="!isGuestSettingsVisible">
+                    <div class="sidebar-title">
+                        <p style="margin: 0;">Add Source</p>
+                    </div>
+                    <div class="sidebar-heading-icon" style="cursor: pointer;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            (click)="sideDrawer.close()">
+                            <path d="M18.5 5.5L5.5 18.5M5.5 5.5L18.5 18.5" stroke="#595959" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="sidebar-heading" *ngIf="isGuestSettingsVisible">
+                    <div class="sidebar-title">
+                        <p style="margin: 0;">Guest 1</p>
+                    </div>
+                    <div class="sidebar-heading-icon" style="cursor: pointer;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            (click)="sideDrawer.close()">
+                            <path d="M18.5 5.5L5.5 18.5M5.5 5.5L18.5 18.5" stroke="#595959" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="source-cards-container" *ngIf="isAddSourceCardBodyVisible">
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.2 14.3997H12.8V9.59973H15.2L12 5.59973L8.80005 9.59973H11.2V14.3997Z"
+                                    fill="#6A3DB8" />
+                                <path
+                                    d="M18.4 16.8003H5.6V11.2003H4V16.8003C4 17.6827 4.7176 18.4003 5.6 18.4003H18.4C19.2824 18.4003 20 17.6827 20 16.8003V11.2003H18.4V16.8003Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Upload File</div>
+                            <div class="source-card-content-description">Upload media from device</div>
+                        </div>
+                        <div class="source-arrow-icon" (click)="openUploadFileSection()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M19.5 4.5V7.5H4.5V4.5H19.5ZM19.5 3H4.5C4.10218 3 3.72064 3.15804 3.43934 3.43934C3.15804 3.72064 3 4.10218 3 4.5V7.5C3 7.89782 3.15804 8.27936 3.43934 8.56066C3.72064 8.84196 4.10218 9 4.5 9H19.5C19.8978 9 20.2794 8.84196 20.5607 8.56066C20.842 8.27936 21 7.89782 21 7.5V4.5C21 4.10218 20.842 3.72064 20.5607 3.43934C20.2794 3.15804 19.8978 3 19.5 3ZM7.5 12V19.5H4.5V12H7.5ZM7.5 10.5H4.5C4.10218 10.5 3.72064 10.658 3.43934 10.9393C3.15804 11.2206 3 11.6022 3 12V19.5C3 19.8978 3.15804 20.2794 3.43934 20.5607C3.72064 20.842 4.10218 21 4.5 21H7.5C7.89782 21 8.27936 20.842 8.56066 20.5607C8.84196 20.2794 9 19.8978 9 19.5V12C9 11.6022 8.84196 11.2206 8.56066 10.9393C8.27936 10.658 7.89782 10.5 7.5 10.5ZM19.5 12V19.5H12V12H19.5ZM19.5 10.5H12C11.6022 10.5 11.2206 10.658 10.9393 10.9393C10.658 11.2206 10.5 11.6022 10.5 12V19.5C10.5 19.8978 10.658 20.2794 10.9393 20.5607C11.2206 20.842 11.6022 21 12 21H19.5C19.8978 21 20.2794 20.842 20.5607 20.5607C20.842 20.2794 21 19.8978 21 19.5V12C21 11.6022 20.842 11.2206 20.5607 10.9393C20.2794 10.658 19.8978 10.5 19.5 10.5Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Template</div>
+                            <div class="source-card-content-description">Choose from an existing template</div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1.5" y="1.5" width="21" height="21" rx="1.5" stroke="#6A3DB8" />
+                                <rect x="3" y="15" width="18" height="6" fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Banner overlay</div>
+                            <div class="source-card-content-description">Add a banner to the stream</div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="19" height="13" viewBox="0 0 19 13" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M1.88636 12H0.409091L4.68182 0.363636H6.13636L10.4091 12H8.93182L5.45455 2.20455H5.36364L1.88636 12ZM2.43182 7.45455H8.38636V8.70455H2.43182V7.45455ZM14.608 12.2045C14.0549 12.2045 13.553 12.1004 13.1023 11.892C12.6515 11.6799 12.2936 11.375 12.0284 10.9773C11.7633 10.5758 11.6307 10.0909 11.6307 9.52273C11.6307 9.02273 11.7292 8.61742 11.9261 8.30682C12.1231 7.99242 12.3864 7.74621 12.7159 7.56818C13.0455 7.39015 13.4091 7.25758 13.8068 7.17045C14.2083 7.07955 14.6117 7.00758 15.017 6.95455C15.5473 6.88636 15.9773 6.83523 16.3068 6.80114C16.6402 6.76326 16.8826 6.70076 17.0341 6.61364C17.1894 6.52652 17.267 6.375 17.267 6.15909V6.11364C17.267 5.55303 17.1136 5.11742 16.8068 4.80682C16.5038 4.49621 16.0436 4.34091 15.4261 4.34091C14.786 4.34091 14.2841 4.48106 13.9205 4.76136C13.5568 5.04167 13.3011 5.34091 13.1534 5.65909L11.8807 5.20455C12.108 4.67424 12.411 4.26136 12.7898 3.96591C13.1723 3.66667 13.589 3.45833 14.0398 3.34091C14.4943 3.2197 14.9413 3.15909 15.3807 3.15909C15.661 3.15909 15.983 3.19318 16.3466 3.26136C16.714 3.32576 17.0682 3.46023 17.4091 3.66477C17.7538 3.86932 18.0398 4.17803 18.267 4.59091C18.4943 5.00379 18.608 5.55682 18.608 6.25V12H17.267V10.8182H17.1989C17.108 11.0076 16.9564 11.2102 16.7443 11.4261C16.5322 11.642 16.25 11.8258 15.8977 11.9773C15.5455 12.1288 15.1155 12.2045 14.608 12.2045ZM14.8125 11C15.3428 11 15.7898 10.8958 16.1534 10.6875C16.5208 10.4792 16.7973 10.2102 16.983 9.88068C17.1723 9.55114 17.267 9.20455 17.267 8.84091V7.61364C17.2102 7.68182 17.0852 7.74432 16.892 7.80114C16.7027 7.85417 16.483 7.90151 16.233 7.94318C15.9867 7.98106 15.7462 8.01515 15.5114 8.04545C15.2803 8.07197 15.0928 8.0947 14.9489 8.11364C14.6004 8.15909 14.2746 8.23295 13.9716 8.33523C13.6723 8.43371 13.4299 8.58333 13.2443 8.78409C13.0625 8.98106 12.9716 9.25 12.9716 9.59091C12.9716 10.0568 13.1439 10.4091 13.4886 10.6477C13.8371 10.8826 14.2784 11 14.8125 11Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Text</div>
+                            <div class="source-card-content-description">Add a text layer</div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M9.776 3.12C9.66738 2.92985 9.61063 2.71451 9.61141 2.49553C9.6122 2.27655 9.67049 2.06161 9.78047 1.87225C9.89044 1.68288 10.0482 1.52573 10.238 1.41652C10.4278 1.30732 10.643 1.2499 10.862 1.25H13.138C13.357 1.2499 13.5722 1.30732 13.762 1.41652C13.9518 1.52573 14.1096 1.68288 14.2195 1.87225C14.3295 2.06161 14.3878 2.27655 14.3886 2.49553C14.3894 2.71451 14.3326 2.92985 14.224 3.12L13.085 5.112C12.605 5.952 11.395 5.952 10.915 5.112L9.776 3.12ZM11.292 2.75L12 3.988L12.708 2.75H11.292ZM7.945 3.25H8.5C8.69891 3.25 8.88968 3.32902 9.03033 3.46967C9.17098 3.61032 9.25 3.80109 9.25 4C9.25 4.19891 9.17098 4.38968 9.03033 4.53033C8.88968 4.67098 8.69891 4.75 8.5 4.75H7.75V19.25H8.5C8.69891 19.25 8.88968 19.329 9.03033 19.4697C9.17098 19.6103 9.25 19.8011 9.25 20C9.25 20.1989 9.17098 20.3897 9.03033 20.5303C8.88968 20.671 8.69891 20.75 8.5 20.75H7.945L7.046 20.749C7.0127 20.7511 6.9793 20.7511 6.946 20.749C6.028 20.742 5.253 20.72 4.608 20.634C3.708 20.512 2.95 20.254 2.348 19.652C1.746 19.05 1.488 18.292 1.367 17.392C1.25 16.525 1.25 15.422 1.25 14.055V9.945C1.25 8.578 1.25 7.475 1.367 6.608C1.487 5.708 1.747 4.95 2.348 4.348C2.95 3.746 3.708 3.488 4.608 3.367C5.253 3.28 6.028 3.257 6.946 3.252C6.9793 3.2498 7.0127 3.2498 7.046 3.252C7.332 3.25 7.631 3.25 7.945 3.25ZM6.25 4.761C5.681 4.773 5.21 4.799 4.808 4.853C4.074 4.952 3.686 5.133 3.409 5.409C3.132 5.686 2.952 6.074 2.853 6.809C2.799 7.209 2.773 7.681 2.761 8.25H6.25V4.761ZM6.25 9.75H2.75V14.25H6.25V9.75ZM6.25 15.75H2.761C2.773 16.319 2.799 16.79 2.853 17.192C2.952 17.926 3.133 18.314 3.409 18.591C3.686 18.868 4.074 19.048 4.809 19.147C5.209 19.201 5.681 19.227 6.25 19.239V15.75ZM16.25 4.75H15.5C15.3011 4.75 15.1103 4.67098 14.9697 4.53033C14.829 4.38968 14.75 4.19891 14.75 4C14.75 3.80109 14.829 3.61032 14.9697 3.46967C15.1103 3.32902 15.3011 3.25 15.5 3.25H16.055C16.3883 3.24977 16.7217 3.25043 17.055 3.252C17.972 3.258 18.747 3.28 19.392 3.367C20.292 3.487 21.05 3.747 21.652 4.348C22.254 4.95 22.512 5.708 22.634 6.608C22.75 7.475 22.75 8.578 22.75 9.945V14.055C22.75 15.422 22.75 16.525 22.634 17.392C22.512 18.292 22.254 19.05 21.652 19.652C21.05 20.254 20.292 20.512 19.392 20.634C18.747 20.72 17.972 20.742 17.054 20.748C17.0207 20.75 16.9873 20.75 16.954 20.748C16.668 20.75 16.368 20.75 16.054 20.75H15.5C15.3011 20.75 15.1103 20.671 14.9697 20.5303C14.829 20.3897 14.75 20.1989 14.75 20C14.75 19.8011 14.829 19.6103 14.9697 19.4697C15.1103 19.329 15.3011 19.25 15.5 19.25H16.25V4.75ZM17.75 4.761V8.25H21.239C21.2346 7.76802 21.2039 7.28663 21.147 6.808C21.048 6.074 20.867 5.686 20.591 5.409C20.314 5.132 19.926 4.952 19.191 4.853C18.791 4.799 18.319 4.773 17.75 4.761ZM21.25 9.75H17.75V14.25H21.25V9.75ZM21.239 15.75H17.75V19.239C18.319 19.227 18.79 19.201 19.192 19.147C19.926 19.048 20.314 18.867 20.591 18.591C20.868 18.314 21.048 17.926 21.147 17.191C21.201 16.791 21.227 16.319 21.239 15.75ZM12 6.75C12.1989 6.75 12.3897 6.82902 12.5303 6.96967C12.671 7.11032 12.75 7.30109 12.75 7.5V8.5C12.75 8.69891 12.671 8.88968 12.5303 9.03033C12.3897 9.17098 12.1989 9.25 12 9.25C11.8011 9.25 11.6103 9.17098 11.4697 9.03033C11.329 8.88968 11.25 8.69891 11.25 8.5V7.5C11.25 7.30109 11.329 7.11032 11.4697 6.96967C11.6103 6.82902 11.8011 6.75 12 6.75ZM12 10.75C12.1989 10.75 12.3897 10.829 12.5303 10.9697C12.671 11.1103 12.75 11.3011 12.75 11.5V12.5C12.75 12.6989 12.671 12.8897 12.5303 13.0303C12.3897 13.171 12.1989 13.25 12 13.25C11.8011 13.25 11.6103 13.171 11.4697 13.0303C11.329 12.8897 11.25 12.6989 11.25 12.5V11.5C11.25 11.3011 11.329 11.1103 11.4697 10.9697C11.6103 10.829 11.8011 10.75 12 10.75ZM12 14.75C12.1989 14.75 12.3897 14.829 12.5303 14.9697C12.671 15.1103 12.75 15.3011 12.75 15.5V16.5C12.75 16.6989 12.671 16.8897 12.5303 17.0303C12.3897 17.171 12.1989 17.25 12 17.25C11.8011 17.25 11.6103 17.171 11.4697 17.0303C11.329 16.8897 11.25 16.6989 11.25 16.5V15.5C11.25 15.3011 11.329 15.1103 11.4697 14.9697C11.6103 14.829 11.8011 14.75 12 14.75ZM9.776 20.88L10.915 18.888C11.0244 18.6968 11.1823 18.5379 11.3729 18.4274C11.5634 18.3169 11.7797 18.2587 12 18.2587C12.2203 18.2587 12.4366 18.3169 12.6271 18.4274C12.8177 18.5379 12.9756 18.6968 13.085 18.888L14.224 20.88C14.3326 21.0701 14.3894 21.2855 14.3886 21.5045C14.3878 21.7235 14.3295 21.9384 14.2195 22.1278C14.1096 22.3171 13.9518 22.4743 13.762 22.5835C13.5722 22.6927 13.357 22.7501 13.138 22.75H10.862C10.643 22.7501 10.4278 22.6927 10.238 22.5835C10.0482 22.4743 9.89044 22.3171 9.78047 22.1278C9.67049 21.9384 9.6122 21.7235 9.61141 21.5045C9.61063 21.2855 9.66738 21.0701 9.776 20.88ZM12 20.012L11.292 21.25H12.708L12 20.012Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Clippings</div>
+                            <div class="source-card-content-description">Add existing clipping </div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.92163 19.3076C0.935301 13.2843 1.11834 10.1928 4.92163 4.69535"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <path d="M6.22949 17.6353C3.1567 12.9923 3.29779 10.6092 6.22949 6.37163"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <path d="M7.84424 16.4142C5.47736 12.8379 5.58603 11.0023 7.84424 7.73815"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <path d="M19.0784 19.3076C23.0647 13.2843 22.8817 10.1928 19.0784 4.69535"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <path d="M17.7705 17.6353C20.8433 12.9923 20.7022 10.6092 17.7705 6.37163"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <path d="M16.1558 16.4142C18.5226 12.8379 18.414 11.0023 16.1558 7.73815"
+                                    stroke="#6A3DB8" stroke-width="0.777894" stroke-linecap="round" />
+                                <ellipse cx="12.0475" cy="11.8516" rx="3.5" ry="3.50064"
+                                    transform="rotate(-90 12.0475 11.8516)" fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Live stream</div>
+                            <div class="source-card-content-description">Add HLS or RTMP live stream</div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.36 14C16.44 13.34 16.5 12.68 16.5 12C16.5 11.32 16.44 10.66 16.36 10H19.74C19.9 10.64 20 11.31 20 12C20 12.69 19.9 13.36 19.74 14M14.59 19.56C15.19 18.45 15.65 17.25 15.97 16H18.92C17.9512 17.6683 16.4141 18.932 14.59 19.56ZM14.34 14H9.66C9.56 13.34 9.5 12.68 9.5 12C9.5 11.32 9.56 10.65 9.66 10H14.34C14.43 10.65 14.5 11.32 14.5 12C14.5 12.68 14.43 13.34 14.34 14ZM12 19.96C11.17 18.76 10.5 17.43 10.09 16H13.91C13.5 17.43 12.83 18.76 12 19.96ZM8 8H5.08C6.03886 6.32721 7.5748 5.06149 9.4 4.44C8.8 5.55 8.35 6.75 8 8ZM5.08 16H8C8.35 17.25 8.8 18.45 9.4 19.56C7.57862 18.9317 6.04485 17.6677 5.08 16ZM4.26 14C4.1 13.36 4 12.69 4 12C4 11.31 4.1 10.64 4.26 10H7.64C7.56 10.66 7.5 11.32 7.5 12C7.5 12.68 7.56 13.34 7.64 14M12 4.03C12.83 5.23 13.5 6.57 13.91 8H10.09C10.5 6.57 11.17 5.23 12 4.03ZM18.92 8H15.97C15.657 6.76146 15.1936 5.5659 14.59 4.44C16.43 5.07 17.96 6.34 18.92 8ZM12 2C6.47 2 2 6.5 2 12C2 14.6522 3.05357 17.1957 4.92893 19.0711C5.85752 19.9997 6.95991 20.7362 8.17317 21.2388C9.38642 21.7413 10.6868 22 12 22C14.6522 22 17.1957 20.9464 19.0711 19.0711C20.9464 17.1957 22 14.6522 22 12C22 10.6868 21.7413 9.38642 21.2388 8.17317C20.7362 6.95991 19.9997 5.85752 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Web source</div>
+                            <div class="source-card-content-description">Import HTML source from web</div>
+                        </div>
+                        <div class="source-arrow-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M17.5 14.0129L17.8564 13.353L16.75 12.7553V14.0129H17.5ZM21.5591 16.2054L21.2027 16.8652L21.5591 16.2054ZM21.5591 7.79465L21.9156 8.45454L21.9156 8.45454L21.5591 7.79465ZM17.5 9.98714H16.75V11.2447L17.8564 10.647L17.5 9.98714ZM3.25 7C3.25 6.30964 3.80964 5.75 4.5 5.75V4.25C2.98122 4.25 1.75 5.48122 1.75 7H3.25ZM3.25 17V7H1.75V17H3.25ZM4.5 18.25C3.80964 18.25 3.25 17.6904 3.25 17H1.75C1.75 18.5188 2.98122 19.75 4.5 19.75V18.25ZM15.5 18.25H4.5V19.75H15.5V18.25ZM16.75 17C16.75 17.6904 16.1904 18.25 15.5 18.25V19.75C17.0188 19.75 18.25 18.5188 18.25 17H16.75ZM16.75 14.0129V17H18.25V14.0129H16.75ZM21.9156 15.5455L17.8564 13.353L17.1436 14.6728L21.2027 16.8652L21.9156 15.5455ZM21.8418 15.5895C21.8418 15.5854 21.8436 15.5746 21.8502 15.5635C21.8557 15.5542 21.8617 15.5492 21.8662 15.5465C21.8706 15.5439 21.8779 15.5409 21.8887 15.5405C21.9016 15.54 21.912 15.5436 21.9156 15.5455L21.2027 16.8652C22.1688 17.3871 23.3418 16.6875 23.3418 15.5895H21.8418ZM21.8418 8.41054V15.5895H23.3418V8.41054H21.8418ZM21.9156 8.45454C21.912 8.45645 21.9016 8.46001 21.8887 8.45952C21.8779 8.45911 21.8706 8.45615 21.8662 8.45349C21.8617 8.45082 21.8557 8.44584 21.8502 8.43655C21.8436 8.42542 21.8418 8.41456 21.8418 8.41054H23.3418C23.3418 7.31253 22.1688 6.61293 21.2027 7.13476L21.9156 8.45454ZM17.8564 10.647L21.9156 8.45454L21.2027 7.13475L17.1436 9.32725L17.8564 10.647ZM16.75 7V9.98714H18.25V7H16.75ZM15.5 5.75C16.1904 5.75 16.75 6.30964 16.75 7H18.25C18.25 5.48122 17.0188 4.25 15.5 4.25V5.75ZM4.5 5.75H15.5V4.25H4.5V5.75Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Local source</div>
+                            <div class="source-card-content-description">Add local video source</div>
+                        </div>
+                        <div class="source-arrow-icon" (click)="openLocalVideoSection()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="4" width="20" height="16" rx="2" stroke="#6A3DB8" />
+                                <path
+                                    d="M11.9999 11.8537C13.5188 11.8537 14.7502 10.5433 14.7502 8.92683C14.7502 7.31039 13.5188 6 11.9999 6C10.481 6 9.24964 7.31039 9.24964 8.92683C9.24964 10.5433 10.481 11.8537 11.9999 11.8537Z"
+                                    fill="#6A3DB8" />
+                                <path
+                                    d="M12 13.3171C9.24422 13.3171 7 15.2839 7 17.7073C7 17.8712 7.12101 18 7.27503 18H16.725C16.879 18 17 17.8712 17 17.7073C17 15.2839 14.7558 13.3171 12 13.3171Z"
+                                    fill="#6A3DB8" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Guest source</div>
+                            <div class="source-card-content-description">Invite a guest to your stream</div>
+                        </div>
+                        <div class="source-arrow-icon" (click)="openGuestSourceSection()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="2" width="20" height="2" rx="1" fill="#6A3DB8" />
+                                <rect x="2" y="7" width="20" height="2" rx="1" fill="#6A3DB8" />
+                                <path d="M2 15C2 14.4477 2.44772 14 3 14H5.5V16H3C2.44772 16 2 15.5523 2 15Z"
+                                    fill="#6A3DB8" />
+                                <path d="M2 21C2 20.4477 2.44772 20 3 20H5.5V22H3C2.44772 22 2 21.5523 2 21Z"
+                                    fill="#6A3DB8" />
+                                <rect x="6" y="10" width="16" height="12" rx="2" fill="#6A3DB8" />
+                                <path
+                                    d="M17.25 15.4641C17.5833 15.6566 17.5833 16.1377 17.25 16.3301L12 19.3612C11.6667 19.5537 11.25 19.3131 11.25 18.9282L11.25 12.866C11.25 12.4811 11.6667 12.2406 12 12.433L17.25 15.4641Z"
+                                    fill="white" />
+                            </svg>
+                        </div>
+                        <div class="source-card-content">
+                            <div class="source-card-content-header">Playlist</div>
+                            <div class="source-card-content-description">Create a sequence of assets to play
+                                automatically
+                            </div>
+                        </div>
+                        <div class="source-arrow-icon" (click)="openPlaylistSection()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="upload-file-section" *ngIf="isUploadFileSectionVisible">
+                    <div class="add-source-inner-section-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin-right: 100px;" (click)="closeUploadFileSection()">
+                            <path d="M9 7L4 12L9 17" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.5 12H5.5" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p style="margin: 0; flex: 1;">Upload file</p>
+                    </div>
+                    <div class="sidebar-form">
+                        <div class="form-input-container">
+                            <div class="form-input-title">
+                                <p style="margin: 0;">Asset name</p>
+                            </div>
+                            <div class="form-input-icon">
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2.25" y="13.6992" width="13.5" height="1.125" rx="0.5625" fill="#595959" />
+                                    <path
+                                        d="M8.66424 4.83576L4.17211 9.32789C4.14872 9.35128 4.13372 9.38175 4.12944 9.41455L3.81933 11.7921C3.79385 11.9874 3.9603 12.1538 4.15561 12.1283L6.53313 11.8182C6.56593 11.814 6.5964 11.799 6.61979 11.7756L11.1119 7.28344M8.66424 4.83576L10.2879 3.21213C10.405 3.09497 10.595 3.09497 10.7121 3.21213L12.7355 5.23555C12.8527 5.3527 12.8527 5.54265 12.7355 5.65981L11.1119 7.28344M8.66424 4.83576C8.66424 4.83576 10.5 5.60291 11.1119 7.28344"
+                                        stroke="#595959" stroke-width="1.125" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" [(ngModel)]="assetName" class="form-control new-layer-input">
+                        </div>
+                        <div class="upload-file-source-title">
+                            <p>Source</p>
+                        </div>
+                        <div class="upload-file-source-input-container">
+                            <div class="upload-file-source-input">
+                                <button class="upload-file-source-browse-btn"
+                                    (click)="fileInput.click()">Browse</button>
+                                <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)"
+                                    accept="image/*" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Apply alpha in linear space</mat-checkbox>
+                        </div>
+                    </div>
+                </div>
+                <div class="local-video-section" *ngIf="isLocalVideoSectionVisible">
+                    <div class="add-source-inner-section-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin-right: 100px;" (click)="closeLocalVideoSection()">
+                            <path d="M9 7L4 12L9 17" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.5 12H5.5" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p style="margin: 0; flex: 1;">Local Source</p>
+                    </div>
+                    <div class="sidebar-form">
+                        <div class="webcam-window-container">
+                            <img src="https://images.pexels.com/photos/6937746/pexels-photo-6937746.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                                alt="Your Image" class="webcam-window" />
+                            <div class="webcam-window-icon-container">
+                                <div class="webcam-window-icon">
+                                    <div class="webcam-window-icon-circle">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8.90289 6.394C8.90289 4.41262 10.3216 2.89888 11.9674 2.89888C13.6132 2.89888 15.0319 4.41262 15.0319 6.394V11.8178C15.0319 13.7992 13.6132 15.3129 11.9674 15.3129C10.3216 15.3129 8.90289 13.7992 8.90289 11.8178V6.394ZM13.0777 8.24082C12.3802 7.99856 11.6205 7.99856 10.9229 8.24082C10.6884 8.32225 10.4324 8.19818 10.3509 7.9637C10.2695 7.72921 10.3936 7.47312 10.6281 7.39169C11.5166 7.0831 12.484 7.0831 13.3726 7.39169C13.6071 7.47312 13.7311 7.72921 13.6497 7.9637C13.5683 8.19818 13.3122 8.32225 13.0777 8.24082ZM12.6045 10.0224C12.2091 9.9235 11.7993 9.9235 11.4039 10.0224C11.1631 10.0827 10.9191 9.93631 10.8589 9.69551C10.7986 9.45471 10.945 9.21067 11.1858 9.15043C11.7244 9.01567 12.284 9.01567 12.8226 9.15043C13.0634 9.21067 13.2098 9.45471 13.1495 9.69551C13.0893 9.93631 12.8453 10.0827 12.6045 10.0224Z"
+                                                fill="white" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8.00408 6.394C8.00408 4.01664 9.73034 2 11.9674 2C14.2044 2 15.9307 4.01664 15.9307 6.394V11.8178C15.9307 14.1951 14.2044 16.2118 11.9674 16.2118C9.73034 16.2118 8.00408 14.1951 8.00408 11.8178V6.394ZM11.9674 2.89888C10.3216 2.89888 8.90289 4.41262 8.90289 6.394V11.8178C8.90289 13.7992 10.3216 15.3129 11.9674 15.3129C13.6132 15.3129 15.0319 13.7992 15.0319 11.8178V6.394C15.0319 4.41262 13.6132 2.89888 11.9674 2.89888ZM5.25897 10.7946C5.50717 10.7946 5.70838 10.9958 5.70838 11.244V12.6629C5.70838 15.9047 8.49017 18.5828 11.9698 18.5983C11.9798 18.5976 11.9899 18.5972 12.0001 18.5972C12.0103 18.5972 12.0204 18.5976 12.0304 18.5983C15.5099 18.5828 18.2917 15.9047 18.2917 12.6629V11.244C18.2917 10.9958 18.4929 10.7946 18.7411 10.7946C18.9893 10.7946 19.1905 10.9958 19.1905 11.244V12.6629C19.1905 16.3108 16.1872 19.2634 12.4495 19.484V21.5506C12.4495 21.7988 12.2483 22 12.0001 22C11.7519 22 11.5507 21.7988 11.5507 21.5506V19.484C7.8129 19.2634 4.80957 16.3108 4.80957 12.6629V11.244C4.80957 10.9958 5.01078 10.7946 5.25897 10.7946Z"
+                                                fill="white" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="webcam-window-icon">
+                                    <div class="webcam-window-icon-circle">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M4.22226 4.22168C2.99494 4.22168 2 5.21662 2 6.44394V17.5558C2 18.7831 2.99494 19.7781 4.22226 19.7781H15.333C16.5604 19.7781 17.5553 18.7831 17.5553 17.5558V6.44394C17.5553 5.21662 16.5604 4.22168 15.333 4.22168H4.22226ZM20.9333 7.24601L17.5556 9.77944V14.2241L20.9333 16.7576C21.3728 17.0872 22 16.7736 22 16.2242V7.77934C22 7.22995 21.3728 6.91636 20.9333 7.24601Z"
+                                                fill="white" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Source name</p>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" [(ngModel)]="assetName" class="form-control new-layer-input">
+                        </div>
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Microphone</p>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select">
+                                <option value="%" selected>Default Microphone</option>
+                                <option value="px">Headset</option>
+                                <option value="em">Bluetooth headset</option>
+                            </select>
+                        </div>
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Camera</p>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select">
+                                <option value="%" selected>Default Camera</option>
+                                <option value="px">Webcam</option>
+                                <option value="em">OBS</option>
+                            </select>
+                        </div>
+                        <div class="sidebar-form-btn-container">
+                            <button mat-raised-button class="sidebar-form-btn" color="primary">Add To Stream
+                            </button>
+                        </div>
+                        <div class="sidebar-form-btn-container">
+                            <button mat-raised-button class="sidebar-form-btn" color="primary"
+                                style="background-color: white; color: black;">Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="local-video-section" *ngIf="isGuestSourceSectionVisible">
+                    <div class="add-source-inner-section-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin-right: 100px;" (click)="closeGuestSourceSection()">
+                            <path d="M9 7L4 12L9 17" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.5 12H5.5" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p style="margin: 0; flex: 1;">Guest Source</p>
+                    </div>
+                    <div class="sidebar-form">
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Source name</p>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" [(ngModel)]="assetName" class="form-control new-layer-input">
+                        </div>
+                        <div class="form-input-title">
+                            <p style="margin: 0;">Link</p>
+                        </div>
+                        <div class="upload-file-source-input-container">
+                            <div class="input-button-container">
+                                <input type="text" class="input-button-container-input-field" />
+                                <button class="input-button-container-copy-button">Copy Link</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Allow video</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Allow screen share</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <p>Share the link with the guest you would like to invite
+                            <p>
+                        </div>
+                    </div>
+                </div>
+                <div class="local-video-section" *ngIf="isGuestSettingsVisible">
+                    <div class="add-source-inner-section-header">
+                        <p style="margin: 0; flex: 1;">Guest Settings</p>
+                    </div>
+                    <div class="sidebar-form">
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Mute audio</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Turn video off</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Allow screen share</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox class="upload-file-source-checkbox">Show live stream to guest</mat-checkbox>
+                        </div>
+                        <div class="sidebar-form-btn-container">
+                            <button mat-raised-button class="sidebar-form-btn" color="primary">Add To Stream
+                            </button>
+                        </div>
+                        <div class="sidebar-form-btn-container">
+                            <button mat-raised-button class="sidebar-form-btn" color="primary"
+                                style="background-color: white; color: black;">Remove guest
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="playlist-section" *ngIf="isPlaylistSectionVisible">
+                    <div class="add-source-inner-section-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin-right: 100px;" (click)="closePlaylistSection()">
+                            <path d="M9 7L4 12L9 17" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.5 12H5.5" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p style="margin: 0; flex: 1;">Playlist</p>
+                    </div>
+                    <div class="playlist-body">
+                        <div class="new-playlist-container">
+                            <button class="new-playlist-btn" (click)="openNewPlaylistSection()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 4L12.5 19M20 11.5L5 11.5" stroke="#595959" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                                <span>Create a playlist</span>
+                            </button>
+                        </div>
+                        <div class="saved-playlist-container">
+                            <div class="saved-playlist-header">
+                                <p>Saved playlists</p>
+                            </div>
+                            <div class="saved-playlist-body">
+                                <p>No saved playlists</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="playlist-section" *ngIf="isNewPlaylistSectionVisible">
+                    <div class="add-source-inner-section-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            style="margin-right: 100px;" (click)="closeNewPlaylistSection()">
+                            <path d="M9 7L4 12L9 17" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M19.5 12H5.5" stroke="#595959" stroke-width="1.5" stroke-miterlimit="10"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p style="margin: 0; flex: 1;">New Playlist</p>
+                    </div>
+                    <div class="new-playlist-form">
+                        <div class="new-playlist-form-name">
+                            <div class="form-input-title">
+                                <p style="margin: 0;">Playlist name</p>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control new-layer-input" placeholder="Playlist 1">
+                            </div>
+                        </div>
+                        <div class="new-playlist-assets-section">
+                            <div class="new-playlist-add-assets-section">
+                                <h2>Assets</h2>
+                                <div class="new-playlist-add-asset">
+                                    <p>Add Asset</p>
+                                    <button>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M11.1998 14.3996H12.7998V9.59961H15.1998L11.9998 5.59961L8.7998 9.59961H11.1998V14.3996Z"
+                                                fill="#595959" />
+                                            <path
+                                                d="M18.4 16.8002H5.6V11.2002H4V16.8002C4 17.6826 4.7176 18.4002 5.6 18.4002H18.4C19.2824 18.4002 20 17.6826 20 16.8002V11.2002H18.4V16.8002Z"
+                                                fill="#595959" />
+                                        </svg>
+                                        <span>Upload media</span>
+                                    </button>
+                                    <p>or</p>
+                                    <button (click)="openGalleryDialog()">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M2 14C2 10.229 2 8.343 3.172 7.172C4.343 6 6.229 6 10 6H14C17.771 6 19.657 6 20.828 7.172C22 8.343 22 10.229 22 14C22 17.771 22 19.657 20.828 20.828C19.657 22 17.771 22 14 22H10C6.229 22 4.343 22 3.172 20.828C2 19.657 2 17.771 2 14Z"
+                                                stroke="#595959" stroke-width="1.5" />
+                                            <path
+                                                d="M3.99979 7L3.98779 6C4.09979 5.069 4.33479 4.426 4.82479 3.937C5.76479 3 7.27879 3 10.3068 3H13.5178C16.5458 3 18.0588 3 18.9998 3.937C19.4898 4.426 19.7248 5.069 19.8368 6V7"
+                                                stroke="#595959" stroke-width="1.5" />
+                                            <path
+                                                d="M17.5 12C18.3284 12 19 11.3284 19 10.5C19 9.67157 18.3284 9 17.5 9C16.6716 9 16 9.67157 16 10.5C16 11.3284 16.6716 12 17.5 12Z"
+                                                stroke="#595959" stroke-width="1.5" />
+                                            <path
+                                                d="M2 14.4999L3.752 12.9669C4.19114 12.583 4.75974 12.3802 5.34272 12.3997C5.9257 12.4192 6.47949 12.6595 6.892 13.0719L11.182 17.3619C11.5149 17.6947 11.9546 17.8995 12.4235 17.9401C12.8925 17.9807 13.3608 17.8546 13.746 17.5839L14.045 17.3739C14.6006 16.9837 15.2721 16.7935 15.9498 16.8343C16.6275 16.8752 17.2713 17.1447 17.776 17.5989L21 20.4999"
+                                                stroke="#595959" stroke-width="1.5" stroke-linecap="round" />
+                                        </svg>
+                                        <span>Choose from gallery</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <hr style="margin: 0;">
+                            <div class="new-playlist-assets-list-section">
+                                <div class="asset-loading-container">
+                                    <div class="asset-grab-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10.4444 8.22222C10.4444 8.89723 9.89723 9.44444 9.22222 9.44444C8.54722 9.44444 8 8.89723 8 8.22222C8 7.54721 8.54722 7 9.22222 7C9.89723 7 10.4444 7.54721 10.4444 8.22222ZM9.22222 13.7222C9.89723 13.7222 10.4444 13.175 10.4444 12.5C10.4444 11.825 9.89723 11.2778 9.22222 11.2778C8.54722 11.2778 8 11.825 8 12.5C8 13.175 8.54722 13.7222 9.22222 13.7222ZM9.22222 18C9.89723 18 10.4444 17.4528 10.4444 16.7778C10.4444 16.1028 9.89723 15.5556 9.22222 15.5556C8.54722 15.5556 8 16.1028 8 16.7778C8 17.4528 8.54722 18 9.22222 18Z"
+                                                fill="#595959" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.2491 8.22222C16.2491 8.89723 15.7019 9.44444 15.0269 9.44444C14.3519 9.44444 13.8047 8.89723 13.8047 8.22222C13.8047 7.54721 14.3519 7 15.0269 7C15.7019 7 16.2491 7.54721 16.2491 8.22222ZM15.0269 13.7222C15.7019 13.7222 16.2491 13.175 16.2491 12.5C16.2491 11.825 15.7019 11.2778 15.0269 11.2778C14.3519 11.2778 13.8047 11.825 13.8047 12.5C13.8047 13.175 14.3519 13.7222 15.0269 13.7222ZM15.0269 18C15.7019 18 16.2491 17.4528 16.2491 16.7778C16.2491 16.1028 15.7019 15.5556 15.0269 15.5556C14.3519 15.5556 13.8047 16.1028 13.8047 16.7778C13.8047 17.4528 14.3519 18 15.0269 18Z"
+                                                fill="#595959" />
+                                        </svg>
+                                    </div>
+                                    <div class="asset-upload-container">
+                                        <p>ICC CWC 2023 - India vs Pakistan - Full highlights.mp4</p>
+                                        <div class="asset-upload-bar-container">
+                                            <div class="asset-upload-status">
+                                                <p>Uploading file</p>
+                                                <p>30%</p>
+                                            </div>
+                                            <button>Cancel</button>
+                                        </div>
+                                        <div class="asset-upload-progress-bar">
+                                            <mat-progress-bar mode="determinate" value="30"></mat-progress-bar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="asset-loaded-container">
+                                    <div class="asset-grab-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10.4444 8.22222C10.4444 8.89723 9.89723 9.44444 9.22222 9.44444C8.54722 9.44444 8 8.89723 8 8.22222C8 7.54721 8.54722 7 9.22222 7C9.89723 7 10.4444 7.54721 10.4444 8.22222ZM9.22222 13.7222C9.89723 13.7222 10.4444 13.175 10.4444 12.5C10.4444 11.825 9.89723 11.2778 9.22222 11.2778C8.54722 11.2778 8 11.825 8 12.5C8 13.175 8.54722 13.7222 9.22222 13.7222ZM9.22222 18C9.89723 18 10.4444 17.4528 10.4444 16.7778C10.4444 16.1028 9.89723 15.5556 9.22222 15.5556C8.54722 15.5556 8 16.1028 8 16.7778C8 17.4528 8.54722 18 9.22222 18Z"
+                                                fill="#595959" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.2491 8.22222C16.2491 8.89723 15.7019 9.44444 15.0269 9.44444C14.3519 9.44444 13.8047 8.89723 13.8047 8.22222C13.8047 7.54721 14.3519 7 15.0269 7C15.7019 7 16.2491 7.54721 16.2491 8.22222ZM15.0269 13.7222C15.7019 13.7222 16.2491 13.175 16.2491 12.5C16.2491 11.825 15.7019 11.2778 15.0269 11.2778C14.3519 11.2778 13.8047 11.825 13.8047 12.5C13.8047 13.175 14.3519 13.7222 15.0269 13.7222ZM15.0269 18C15.7019 18 16.2491 17.4528 16.2491 16.7778C16.2491 16.1028 15.7019 15.5556 15.0269 15.5556C14.3519 15.5556 13.8047 16.1028 13.8047 16.7778C13.8047 17.4528 14.3519 18 15.0269 18Z"
+                                                fill="#595959" />
+                                        </svg>
+                                    </div>
+                                    <div class="asset-upload-container">
+                                        <p>ICC CWC 2023 - India vs Pakistan - Full highlights.mp4</p>
+                                        <div class="asset-upload-settings-container">
+                                            <div class="div-asset-settings-icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="9" cy="4.5" r="1.125" fill="#595959" />
+                                                    <circle cx="9" cy="9" r="1.125" fill="#595959" />
+                                                    <circle cx="9" cy="13.5" r="1.125" fill="#595959" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin: 0;">
+                    <div class="new-playlist-footer">
+                        <button class="new-playlist-save-btn">Save Playlist</button>
+                        <button class="new-playlist-use-btn">Use Playlist</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isBroadcastSectionVisible">
+                <div class="sidebar-heading">
+                    <div class="sidebar-title">
+                        <p style="margin: 0;">Broadcast</p>
+                    </div>
+                    <div class="sidebar-heading-icon" style="cursor: pointer;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            (click)="sideDrawer.close()">
+                            <path d="M18.5 5.5L5.5 18.5M5.5 5.5L18.5 18.5" stroke="#595959" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="broadcast-body">
+                    <div class="broadcast-options">
+                        <p style="text-align: center; margin:0 0 12px;">Select broadcast destination</p>
+                        <div class="broadcast-options-body">
+                            <div class="broadcast-card">
+                                <div class="broadcast-card-icon">
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M38.1705 11.0721C37.9519 10.2854 37.5262 9.56822 36.9357 8.99182C36.3452 8.41542 35.6105 7.99988 34.8046 7.78649C31.8536 7 19.9762 7 19.9762 7C19.9762 7 8.09828 7.02318 5.14675 7.80967C4.34079 8.02306 3.60606 8.4386 3.01557 9.015C2.42508 9.5914 1.99939 10.3086 1.78078 11.0953C1 13.9764 1 20 1 20C1 20 1 26.0236 1.80512 28.9279C2.02373 29.7146 2.44943 30.4318 3.03992 31.0082C3.63041 31.5846 4.36514 32.0001 5.17109 32.2135C8.12203 33 20 33 20 33C20 33 31.878 33 34.8295 32.2141C35.6355 32.0007 36.3702 31.5852 36.9607 31.0088C37.5512 30.4324 37.9769 29.7152 38.1955 28.9284C39 26.0473 39 20 39 20C39 20 38.9762 13.9764 38.1705 11.0721Z"
+                                            fill="#FF0000" />
+                                        <path d="M16.1951 25.5706L26.0484 19.9996L16.1945 14.4287L16.1951 25.5706Z"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                                <div class="broadcast-card-content">
+                                    <div class="broadcast-card-content-header">Youtube</div>
+                                </div>
+                                <div class="broadcast-arrow-icon" (click)="openUploadFileSection()">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="broadcast-card">
+                                <div class="broadcast-card-icon">
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="40" height="40" fill="white" />
+                                        <path
+                                            d="M38 19.9998C38 10.0577 29.9422 2 20 2C10.0578 2 2 10.0577 2 19.9998C2 28.985 8.57844 36.4317 17.1889 37.7824V25.2071H12.6221V19.9998H17.1889V16.0349C17.1889 11.5273 19.8713 9.03259 23.9846 9.03259C25.9569 9.03259 28.0184 9.38766 28.0184 9.38766V13.8159H25.7502C23.5114 13.8159 22.8209 15.2067 22.8209 16.627V19.9998H27.8117L27.013 25.2071H22.8209V37.7824C31.4216 36.4317 38 28.985 38 19.9998Z"
+                                            fill="#1877F2" />
+                                        <path
+                                            d="M27.002 25.2077L27.8014 20.0004H22.8106V16.6276C22.8106 15.2073 23.511 13.8165 25.7399 13.8165H28.0081V9.38828C28.0081 9.38828 25.9466 9.0332 23.9743 9.0332C19.8617 9.0332 17.1786 11.5286 17.1786 16.0356V20.0004H12.6118V25.2077H17.1786V37.783C18.0962 37.9307 19.0328 38.0003 19.9897 38.0003C20.9467 38.0003 21.8832 37.9215 22.8008 37.783V25.2077H27.002Z"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                                <div class="broadcast-card-content">
+                                    <div class="broadcast-card-content-header">Facebook</div>
+                                </div>
+                                <div class="broadcast-arrow-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="broadcast-card">
+                                <div class="broadcast-card-icon">
+                                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <rect width="36" height="36" fill="url(#pattern0)" />
+                                        <defs>
+                                            <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1"
+                                                height="1">
+                                                <use xlink:href="#image0_429_999" transform="scale(0.00333333)" />
+                                            </pattern>
+                                            <image id="image0_429_999" width="300" height="300"
+                                                xlink:href="data:image/png;base64,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" />
+                                        </defs>
+                                    </svg>
+                                </div>
+                                <div class="broadcast-card-content">
+                                    <div class="broadcast-card-content-header">Twitter</div>
+                                </div>
+                                <div class="broadcast-arrow-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="broadcast-card">
+                                <div class="broadcast-card-icon">
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="40" height="40" rx="20" fill="#6441A4" />
+                                        <path
+                                            d="M9.69775 8L8 12.2945V29.7791H14.0193V33H17.4148L20.5788 29.7791H25.4405L32 23.2607V8H9.69775ZM29.7621 22.1871L26.0579 25.8681H20.0386L16.7974 29.089V25.8681H11.7814V10.2239H29.7621V22.1871ZM26.0579 14.5184V21.0368H23.7428V14.5184H26.0579ZM20.0386 14.5184V21.0368H17.8006V14.5184H20.0386Z"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                                <div class="broadcast-card-content">
+                                    <div class="broadcast-card-content-header">Twitch</div>
+                                </div>
+                                <div class="broadcast-arrow-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="broadcast-card">
+                                <div class="broadcast-card-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M16.36 14C16.44 13.34 16.5 12.68 16.5 12C16.5 11.32 16.44 10.66 16.36 10H19.74C19.9 10.64 20 11.31 20 12C20 12.69 19.9 13.36 19.74 14M14.59 19.56C15.19 18.45 15.65 17.25 15.97 16H18.92C17.9512 17.6683 16.4141 18.932 14.59 19.56ZM14.34 14H9.66C9.56 13.34 9.5 12.68 9.5 12C9.5 11.32 9.56 10.65 9.66 10H14.34C14.43 10.65 14.5 11.32 14.5 12C14.5 12.68 14.43 13.34 14.34 14ZM12 19.96C11.17 18.76 10.5 17.43 10.09 16H13.91C13.5 17.43 12.83 18.76 12 19.96ZM8 8H5.08C6.03886 6.32721 7.5748 5.06149 9.4 4.44C8.8 5.55 8.35 6.75 8 8ZM5.08 16H8C8.35 17.25 8.8 18.45 9.4 19.56C7.57862 18.9317 6.04485 17.6677 5.08 16ZM4.26 14C4.1 13.36 4 12.69 4 12C4 11.31 4.1 10.64 4.26 10H7.64C7.56 10.66 7.5 11.32 7.5 12C7.5 12.68 7.56 13.34 7.64 14M12 4.03C12.83 5.23 13.5 6.57 13.91 8H10.09C10.5 6.57 11.17 5.23 12 4.03ZM18.92 8H15.97C15.657 6.76146 15.1936 5.5659 14.59 4.44C16.43 5.07 17.96 6.34 18.92 8ZM12 2C6.47 2 2 6.5 2 12C2 14.6522 3.05357 17.1957 4.92893 19.0711C5.85752 19.9997 6.95991 20.7362 8.17317 21.2388C9.38642 21.7413 10.6868 22 12 22C14.6522 22 17.1957 20.9464 19.0711 19.0711C20.9464 17.1957 22 14.6522 22 12C22 10.6868 21.7413 9.38642 21.2388 8.17317C20.7362 6.95991 19.9997 5.85752 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2Z"
+                                            fill="#6A3DB8" />
+                                    </svg>
+                                </div>
+                                <div class="broadcast-card-content">
+                                    <div class="broadcast-card-content-header">Web - RTMP & SRT</div>
+                                </div>
+                                <div class="broadcast-arrow-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 5L16 12L9 19" stroke="black" stroke-width="1.5"
+                                            stroke-linecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="broadcasting-destinations">
+                        <p style="text-align: center; margin: 12px 0;">Currently broadcasting to:</p>
+                        <div class="broadcasting-destinations-body">
+                            <div class="broadcasting-empty-body">
+                                <div class="broadcasting-empty-destination-icon">
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="1.6665" y="6.66602" width="36.6667" height="26.6667" rx="3.33333"
+                                            fill="#D1D1D1" />
+                                        <rect x="8.33301" y="27.332" width="23.3333" height="3.33333" rx="1.66667"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                                <p style="text-align: center; margin: 12px 0;">No destinations added!</p>
+                            </div>
+                            <div class="broadcasting-body">
+                                <div class="broadcasting-item">
+                                    <div class="broadcasting-item-header">
+                                        <div class="broadcasting-item-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M38.1705 11.0721C37.9519 10.2854 37.5262 9.56822 36.9357 8.99182C36.3452 8.41542 35.6105 7.99988 34.8046 7.78649C31.8536 7 19.9762 7 19.9762 7C19.9762 7 8.09828 7.02318 5.14675 7.80967C4.34079 8.02306 3.60606 8.4386 3.01557 9.015C2.42508 9.5914 1.99939 10.3086 1.78078 11.0953C1 13.9764 1 20 1 20C1 20 1 26.0236 1.80512 28.9279C2.02373 29.7146 2.44943 30.4318 3.03992 31.0082C3.63041 31.5846 4.36514 32.0001 5.17109 32.2135C8.12203 33 20 33 20 33C20 33 31.878 33 34.8295 32.2141C35.6355 32.0007 36.3702 31.5852 36.9607 31.0088C37.5512 30.4324 37.9769 29.7152 38.1955 28.9284C39 26.0473 39 20 39 20C39 20 38.9762 13.9764 38.1705 11.0721Z"
+                                                    fill="#FF0000" />
+                                                <path
+                                                    d="M16.1951 25.5706L26.0484 19.9996L16.1945 14.4287L16.1951 25.5706Z"
+                                                    fill="white" />
+                                            </svg>
+                                            <p style="margin: 0;">YouTube</p>
+                                        </div>
+                                        <div class="broadcasting-item-actions">
+                                            <div class="broadcasting-item-pause-icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="2.25" y="2.25" width="4.5" height="13.5" fill="#595959" />
+                                                    <rect x="11.25" y="2.25" width="4.5" height="13.5" fill="#595959" />
+                                                </svg>
+                                            </div>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="12" cy="6" r="1.5" fill="#595959" />
+                                                <circle cx="12" cy="12" r="1.5" fill="#595959" />
+                                                <circle cx="12" cy="18" r="1.5" fill="#595959" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="broadcasting-item-link">
+                                        <div class="broadcasting-item-link-container">
+                                            <input [value]="backendLink" disabled #linkInput />
+                                            <button class="copy-btn" (click)="copyToClipboard(linkInput)">
+                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="4.5" y="0.75" width="12" height="13.5" rx="1.5"
+                                                        fill="#595959" />
+                                                    <path d="M2.25 6V15C2.25 15.8284 2.92157 16.5 3.75 16.5H12.75"
+                                                        stroke="#595959" stroke-width="1.125" stroke-linecap="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="broadcasting-item">
+                                    <div class="broadcasting-item-header">
+                                        <div class="broadcasting-item-icon">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="40" height="40" fill="white" />
+                                                <path
+                                                    d="M38 19.9998C38 10.0577 29.9422 2 20 2C10.0578 2 2 10.0577 2 19.9998C2 28.985 8.57844 36.4317 17.1889 37.7824V25.2071H12.6221V19.9998H17.1889V16.0349C17.1889 11.5273 19.8713 9.03259 23.9846 9.03259C25.9569 9.03259 28.0184 9.38766 28.0184 9.38766V13.8159H25.7502C23.5114 13.8159 22.8209 15.2067 22.8209 16.627V19.9998H27.8117L27.013 25.2071H22.8209V37.7824C31.4216 36.4317 38 28.985 38 19.9998Z"
+                                                    fill="#1877F2" />
+                                                <path
+                                                    d="M27.002 25.2077L27.8014 20.0004H22.8106V16.6276C22.8106 15.2073 23.511 13.8165 25.7399 13.8165H28.0081V9.38828C28.0081 9.38828 25.9466 9.0332 23.9743 9.0332C19.8617 9.0332 17.1786 11.5286 17.1786 16.0356V20.0004H12.6118V25.2077H17.1786V37.783C18.0962 37.9307 19.0328 38.0003 19.9897 38.0003C20.9467 38.0003 21.8832 37.9215 22.8008 37.783V25.2077H27.002Z"
+                                                    fill="white" />
+                                            </svg>
+                                            <p style="margin: 0;">Facebook</p>
+                                        </div>
+                                        <div class="broadcasting-item-actions">
+                                            <div class="broadcasting-item-pause-icon">
+                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="2.25" y="2.25" width="4.5" height="13.5" fill="#595959" />
+                                                    <rect x="11.25" y="2.25" width="4.5" height="13.5" fill="#595959" />
+                                                </svg>
+                                            </div>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="12" cy="6" r="1.5" fill="#595959" />
+                                                <circle cx="12" cy="12" r="1.5" fill="#595959" />
+                                                <circle cx="12" cy="18" r="1.5" fill="#595959" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="broadcasting-item-link">
+                                        <div class="broadcasting-item-link-container">
+                                            <input [value]="backendLink" disabled #linkInput />
+                                            <button class="copy-btn" (click)="copyToClipboard(linkInput)">
+                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="4.5" y="0.75" width="12" height="13.5" rx="1.5"
+                                                        fill="#595959" />
+                                                    <path d="M2.25 6V15C2.25 15.8284 2.92157 16.5 3.75 16.5H12.75"
+                                                        stroke="#595959" stroke-width="1.125" stroke-linecap="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer>
+
+        <mat-drawer-content>
+            <div class="container-fluid">
+                <div class="production-content">
+                    <div class="video-container">
+                        <div class="video-area">
+                            <div class="preview-area">
+                                <div class="preview-title">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="9" cy="9.5" r="8" fill="#30CF46" />
+                                    </svg>
+                                    <span class="preview">Preview</span>
+                                </div>
+                                <div class="preview-video-container">
+                                    <div class="preview-video"></div>
+                                </div>
+                            </div>
+                            <div class="program-area">
+                                <div class="program-title">
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="9" cy="9" r="8" fill="#FF432E" />
+                                    </svg>
+                                    <span class="program">Program</span>
+                                </div>
+                                <div class="program-video-container">
+                                    <div class="program-video"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <label for="effect">Effect</label>
+                            <select id="effect" class="form-select" aria-label="Default select example">
+                                <option value="1" selected>Fade</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <label for="duration">Duration</label>
+                            <select id="duration" class="form-select" aria-label="Default select example">
+                                <option value="1" selected>300ms</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <button mat-raised-button class="transition-btn" color="primary"><span>Transition</span>
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.75 3L12.75 9L6.75 15" stroke="white" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layers-container">
+                        <button mat-raised-button class="new-layer-btn" (click)="openSideDrawer('layer')"><svg
+                                width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 1.25L8 14.75M14.75 8L1.25 8" stroke="white" stroke-width="1.125"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <span>New Layer</span>
+                        </button>
+                        <div class="layers-list-container" cdkDropList (cdkDropListDropped)="drop($event)">
+                            <div class="layer-container" *ngFor="let layer of allStudioLayers; let i = index" cdkDrag>
+                                <div class="layer-container-header">
+                                    <div class="layer-container-header-title">
+                                        <p>{{layer.name}}</p>
+                                    </div>
+                                    <div class="layer-container-header-action">
+                                        <div class="layer-container-header-action-indicators">
+                                            <svg width="40" height="6" viewBox="0 0 40 6" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="40" height="6" rx="3" fill="#30CF46" />
+                                            </svg>
+                                            <svg width="40" height="6" viewBox="0 0 40 6" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect width="40" height="6" rx="3" fill="#FF432E" />
+                                            </svg>
+                                        </div>
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M1.88892 10.3206V9.01535C1.88892 8.24407 2.5497 7.60629 3.36596 7.60629C4.77303 7.60629 5.3483 6.65703 4.64087 5.49269C4.23663 4.82524 4.47762 3.95756 5.18505 3.57192L6.52993 2.83772C7.14407 2.48917 7.937 2.69682 8.30238 3.28269L8.38789 3.4236C9.08754 4.58793 10.2381 4.58793 10.9455 3.4236L11.031 3.28269C11.3964 2.69682 12.1893 2.48917 12.8035 2.83772L14.1483 3.57192C14.8558 3.95756 15.0968 4.82524 14.6925 5.49269C13.9851 6.65703 14.5604 7.60629 15.9674 7.60629C16.7759 7.60629 17.4445 8.23666 17.4445 9.01535V10.3206C17.4445 11.0919 16.7837 11.7296 15.9674 11.7296C14.5604 11.7296 13.9851 12.6789 14.6925 13.8432C15.0968 14.5181 14.8558 15.3784 14.1483 15.764L12.8035 16.4982C12.1893 16.8468 11.3964 16.6391 11.031 16.0532L10.9455 15.9123C10.2458 14.748 9.09531 14.748 8.38789 15.9123L8.30238 16.0532C7.937 16.6391 7.14407 16.8468 6.52993 16.4982L5.18505 15.764C4.47762 15.3784 4.23663 14.5107 4.64087 13.8432C5.3483 12.6789 4.77303 11.7296 3.36596 11.7296C2.5497 11.7296 1.88892 11.0919 1.88892 10.3206Z"
+                                                stroke="white" stroke-width="1.16667" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path
+                                                d="M12.1943 9.668C12.1943 11.064 11.0626 12.1958 9.66653 12.1958C8.27048 12.1958 7.13875 11.064 7.13875 9.668C7.13875 8.27194 8.27048 7.14022 9.66653 7.14022C11.0626 7.14022 12.1943 8.27194 12.1943 9.668Z"
+                                                stroke="white" stroke-width="1.16667" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" style="cursor:grabbing;" cdkDragHandle>
+                                            <circle cx="6.11122" cy="3.77785" r="1.55556" fill="white" />
+                                            <circle cx="6.11122" cy="9.99916" r="1.55556" fill="white" />
+                                            <circle cx="6.11122" cy="16.2218" r="1.55556" fill="white" />
+                                            <circle cx="13.1112" cy="3.77785" r="1.55556" fill="white" />
+                                            <circle cx="13.1112" cy="9.99916" r="1.55556" fill="white" />
+                                            <circle cx="13.1112" cy="16.2218" r="1.55556" fill="white" />
+                                        </svg>
+                                        <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            (click)="toggleLayerContainerBodyVisibility(i)"
+                                            [ngClass]="{'rotate-arrow': arrowRotation[i]}">
+                                            <path d="M5 8L12 15L19 8" stroke="white" stroke-width="1.5"
+                                                stroke-linecap="round" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="layer-container-body" *ngIf="layer.isLayerContainerBodyVisible">
+                                    <div class="layer-container-body-thumbnail-container">
+                                        <div class="layer-thumbnail">
+                                            <img src="https://resources.pulse.icc-cricket.com/ICC/photo/2023/10/29/be1b34fa-1214-4c82-9376-701bc5cfa867/KzLeUKO6.jpg"
+                                                alt="Image Name" class='image'>
+                                            <div class="layer-thumbnail-overlay-header">
+                                                <svg width="64" height="6" viewBox="0 0 64 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="64" height="6" rx="3" fill="#30CF46" />
+                                                </svg>
+                                                <svg width="64" height="6" viewBox="0 0 64 6" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="64" height="6" rx="3" fill="#FF432E" />
+                                                </svg>
+                                            </div>
+                                            <div class="layer-thumbnail-overlay-footer">
+                                                <span class="layer-thumbnail-overlay-footer-label">Live match</span>
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" style="cursor: pointer;">
+                                                    <circle cx="12" cy="6" r="1.5" fill="white" />
+                                                    <circle cx="12" cy="12" r="1.5" fill="white" />
+                                                    <circle cx="12" cy="18" r="1.5" fill="white" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="webcam-thumbnail">
+                                            <img src="https://images.pexels.com/photos/6937746/pexels-photo-6937746.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                                                alt="Image Name" class='image'>
+                                            <div class="webcam-thumbnail-overlay-header">
+                                                <svg width="64" height="7" viewBox="0 0 64 7" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="64" height="7" rx="3" fill="#30CF46" />
+                                                </svg>
+                                                <svg width="64" height="7" viewBox="0 0 64 7" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect width="64" height="7" rx="3" fill="#FF432E" />
+                                                </svg>
+                                            </div>
+                                            <div class="webcam-thumbnail-overlay-footer" (click)="openGuestSettings()">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg" style="cursor: pointer;">
+                                                    <circle cx="12" cy="6" r="1.5" fill="white" />
+                                                    <circle cx="12" cy="12" r="1.5" fill="white" />
+                                                    <circle cx="12" cy="18" r="1.5" fill="white" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layer-container-body-add-source-btn-container">
+                                        <button mat-raised-button class="layer-container-body-add-source-btn"
+                                            (click)="openSideDrawer('source')"><svg width="18" height="18"
+                                                viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9 2.25L9 15.75M15.75 9L2.25 9" stroke="white"
+                                                    stroke-width="1.125" stroke-linecap="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar">
+                    <div class="sidebar-btn" (click)="openBroadcastSection()">
+                        <svg width="41" height="30" viewBox="0 0 41 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0.5" width="40" height="30" rx="4" fill="#A16BFF" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10.5 10C9.39543 10 8.5 10.8954 8.5 12V22C8.5 23.1046 9.39543 24 10.5 24H21.5C22.6046 24 23.5 23.1046 23.5 22V19.0129L27.5591 21.2054C28.0255 21.4573 28.5918 21.1195 28.5918 20.5895V13.4105C28.5918 12.8805 28.0255 12.5427 27.5591 12.7946L23.5 14.9871V12C23.5 10.8954 22.6046 10 21.5 10H10.5Z"
+                                fill="white" />
+                            <path
+                                d="M27.816 3.5952C30.3528 4.10279 32.6128 5.59242 34.1075 7.74212C34.8591 8.81727 35.3963 10.0266 35.6883 11.3007C35.9803 12.5748 36.0214 13.8888 35.8092 15.1672M27.2713 7.68577C28.7002 7.92694 30.0193 8.7017 30.8961 9.95923C31.7837 11.2323 32.0511 12.7587 31.766 14.1972"
+                                stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Broadcast</span>
+                    </div>
+                    <div class="sidebar-btn">
+                        <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 17C10 13.229 10 11.343 11.172 10.172C12.343 9 14.229 9 18 9H22C25.771 9 27.657 9 28.828 10.172C30 11.343 30 13.229 30 17C30 20.771 30 22.657 28.828 23.828C27.657 25 25.771 25 22 25H18C14.229 25 12.343 25 11.172 23.828C10 22.657 10 20.771 10 17Z"
+                                stroke="white" stroke-width="1.5" />
+                            <path
+                                d="M11.9998 10L11.9878 9C12.0998 8.069 12.3348 7.426 12.8248 6.937C13.7648 6 15.2788 6 18.3068 6H21.5178C24.5458 6 26.0588 6 26.9998 6.937C27.4898 7.426 27.7248 8.069 27.8368 9V10"
+                                stroke="white" stroke-width="1.5" />
+                            <path
+                                d="M25.5 15C26.3284 15 27 14.3284 27 13.5C27 12.6716 26.3284 12 25.5 12C24.6716 12 24 12.6716 24 13.5C24 14.3284 24.6716 15 25.5 15Z"
+                                stroke="white" stroke-width="1.5" />
+                            <path
+                                d="M10 17.5L11.752 15.967C12.1911 15.5831 12.7597 15.3803 13.3427 15.3998C13.9257 15.4193 14.4795 15.6596 14.892 16.072L19.182 20.362C19.5149 20.6948 19.9546 20.8996 20.4235 20.9402C20.8925 20.9808 21.3608 20.8547 21.746 20.584L22.045 20.374C22.6006 19.9838 23.2721 19.7936 23.9498 19.8344C24.6275 19.8753 25.2713 20.1448 25.776 20.599L29 23.5"
+                                stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        <span>Gallery</span>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+    <!-- </div> -->
+</div>

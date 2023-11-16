@@ -1,0 +1,94 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    background-color: #1d2022; /* Dark grey background color */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .webcam-window-container {
+    position: relative;
+    display: inline-block;
+    width: 640px;
+    height: 480px;
+    margin-top: 60px;
+  }
+  
+  .webcam-window {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.webcam-window-icon-container {
+    position: absolute;
+    display: flex;
+    bottom: 10px;
+    left: 10px;
+    gap: 10px;
+  }
+  
+  .webcam-window-icon {
+    font-size: 24px;
+    color: white;
+    margin: 4px;
+    height: 40px;
+    width: 40px;
+  }
+  
+  .webcam-window-icon-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #89e78a;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
+  
+  .dropdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  select {
+    width: 456px;
+    height: 48px;
+    background: #2b2f32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0 8px;
+  }
+
+  .webcam-feed-input-label{
+    display: flex;
+    width: 100%;
+    color: white;
+  }
+  
+  button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  

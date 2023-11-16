@@ -1,0 +1,49 @@
+.dialog-title{
+    text-align: center;
+}
+.gallery-dialog-chips{
+
+}
+.gallery-dialog-container{
+    height: 600px;
+}
+
+.gallery-dialog-items-container{
+    display: flex;
+    padding: 16px;
+    gap: 8px;
+}
+
+.gallery-dialog-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 200px;
+    height: 120px;
+    border-radius: 4px;
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.20);
+    padding: 8px;
+}
+
+.gallery-dialog-item-btn{
+    width: 100%;
+    border: none;
+    padding: 10px;
+    background: #F2F2F2;
+    border-radius: 100px;
+}
+
+.gallery-dialog-icon-header{
+    display: flex;
+    gap: 8px;
+}
+
+.gallery-dialog-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #F2F2F2;
+    border-radius: 50%;
+}

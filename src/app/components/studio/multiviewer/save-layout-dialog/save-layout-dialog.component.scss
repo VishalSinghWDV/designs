@@ -1,0 +1,41 @@
+
+.save-layout-dialog-container {
+    width: 344px;
+    height: 134px;
+    padding: 16px;
+  
+  }
+
+  .dialog-input-container{
+      display: flex;
+        flex-direction: column;
+  }
+
+  #layout-name{
+    height: 35px;
+    border-radius: 4px;
+    border: 1px rgba(89.25, 89.25, 89.25, 0.25) solid;
+  }
+
+  .dialog-btns-container{
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .dialog-close-btn{
+    width: 120px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+  }
+
+  .dialog-save-btn{
+    width: 120px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background: #804cf5;
+    color: white;
+  }

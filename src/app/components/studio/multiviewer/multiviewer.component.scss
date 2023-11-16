@@ -1,0 +1,236 @@
+// .multiviewer-top-bar{
+//     width: 100%;
+//   background-color: #1d2022; /* Light gray background color */
+//   padding: 10px;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// }
+
+// .multiviewer-top-bar-center-div {
+//     padding: 10px 20px;
+//     background-color: black; /* Button background color */
+//     color: white; /* Button text color */
+//     border: none;
+//     border-radius: 5px;
+//     margin: 0 5px;
+//     cursor: pointer;
+//   }
+
+//   .multiviewer-top-bar-end-div {
+//     padding: 10px 20px;
+//     background-color: black; /* Button background color */
+//     color: white; /* Button text color */
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//   }
+
+
+.multiviewer-top-bar {
+  background-color: #1d2022;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.multiviewer-top-bar-center-div {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.multiviewer-top-bar-center-btns {
+  display: flex;
+  align-items: center;
+}
+
+.center-div {
+  padding: 5px 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+  // cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.multiviewer-top-bar-end-btn {
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.video-area {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // gap: 10px;
+  border: 1px black solid;
+}
+
+.preview-area,
+.program-area {
+  border: 1px #6e6e6e solid;
+}
+
+.preview-video-container {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.program-video-container {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.preview-video {
+  height: 312px;
+  min-width: 260px;
+  max-width: 656px;
+  margin: 20px 20px 20px 0;
+  background-color: black;
+  width: 100%;
+  position: relative;
+}
+
+.preview-video img, .program-video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.program-video {
+  height: 312px;
+  min-width: 260px;
+  max-width: 656px;
+  margin: 20px 0 20px 20px;
+  background-color: black;
+  width: 100%;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  // text-align: center;
+}
+
+.overlay-title {
+  color: white;
+  padding: 10px;
+  margin: 0;
+}
+
+.assets-panel-container{
+  display: grid;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.assets-row{
+  display: flex;
+  gap: 16px;
+}
+
+.asset-item{
+  width: 448px;
+    height: 200px;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-direction: column;
+}
+
+.overlay-header {
+  position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-select{
+    width: 100%;
+    background: #484f53;
+    background-color: none;
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.top-bar-select {
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: none;
+  height: 30px;
+  width: 230px;
+}
+
+.form-input{
+  background-color: black;
+  color: white;
+  border: none;
+  height: 30px;
+  width: 230px;
+}
+
+.edit-save-btn {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  width: 90px;
+}
+
+.time-stamp{
+  margin: 0;
+    width: 128px;
+    font-size: 24px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-row-btn {
+  border: 1px rgb(128, 128, 128) solid;
+  color: white !important;
+  padding: 15px;
+  background-color: #1d2022 !important;
+  display: flex;
+    width: 1027px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.extra-assets-row-btn-container{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+}
